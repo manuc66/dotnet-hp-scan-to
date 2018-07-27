@@ -13,19 +13,22 @@ namespace HPScanTo.Tests
         [Fact]
         public void ItContainsListOfDestinations()
         {
-            using (var stream = GetRessource("WalkupScanDestinations.xml"))
+            using (var stream = RessourceHelper.GetRessource("WalkupScanDestinations.xml"))
             {
                 var walkupScanDestinations = WalkupScanDestinations.CreateFromStream(stream);
                 Assert.Equal(1, walkupScanDestinations.WalkupScanDestination.Count);
             }
         }
 
-        private Stream GetRessource(string walkupscandestinationsXml)
+        [Fact]
+        public void SampleContainsAKnownDestinationName()
         {
-            var type = GetType();
-            var assembly = type.GetTypeInfo().Assembly;
-            var ressourceName = $"{type.Namespace}.ressources.{walkupscandestinationsXml}";
-            return assembly.GetManifestResourceStream(ressourceName);
+            using (var stream =  RessourceHelper.GetRessource("WalkupScanDestinations.xml"))
+            {
+                var walkupScanDestinations = WalkupScanDestinations.CreateFromStream(stream);
+                Assert.True(walkupScanDestinations.WalkupScanDestination.Any(x => x.Name == "DESKTOP-JI67N1P"));
+            }
         }
+
     }
 }

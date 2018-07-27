@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ressources\WalkupScanDestinations.xml" />
+    <None Remove="ressources\WalkupScanDestination.xml" />
+    <EmbeddedResource Include="ressources\WalkupScanDestination.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HPScanTo\HPScanTo.csproj" />
