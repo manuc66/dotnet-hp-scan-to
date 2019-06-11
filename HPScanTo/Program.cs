@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HPScanTo.Generated;
 using Zeroconf;
 
 namespace HPScanTo
@@ -40,7 +42,17 @@ namespace HPScanTo
         public static async Task Register(string ipAddress)
         {
             var hpApi = new HPApi(ipAddress);
-            await hpApi.GetWalkupScanDestinations();
+            var destinations = await hpApi.GetWalkupScanDestinations();
+
+            var destination = destinations.WalkupScanDestination.Find(dest => Environment.MachineName == dest.Hostname);
+            if (destination == null)
+            {
+                await hpApi.PostWalkupScanDestinations(WalkupScanDestinationPost.CreateFrom(Environment.MachineName, Environment.MachineName));
+            }
+            else
+            {
+                Console.WriteLine($"Reusing {destination.Name} - {destination.Hostname}");
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using HPScanTo.Generated;
 
@@ -23,6 +25,15 @@ namespace HPScanTo
             {
                 return WalkupScanDestinations.CreateFromStream(inStream);
             }
+        }
+        public async Task<Uri> PostWalkupScanDestinations(WalkupScanDestinationPost destination)
+        {
+            var httpClient = new HttpClient();
+            var addr = $"{_baseUrl}/WalkupScan/WalkupScanDestinations";
+            var response = await httpClient.PostAsync(addr,
+                new StringContent(destination.SerializeToXml(), Encoding.UTF8, "text/xml"));
+
+            return response.Headers.Location;
         }
     }
 }

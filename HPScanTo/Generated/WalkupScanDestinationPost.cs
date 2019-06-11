@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace HPScanTo.Generated
@@ -30,21 +32,29 @@ namespace HPScanTo.Generated
 
         public static WalkupScanDestinationPost CreateFrom(string hostname, string name)
         {
-            var walkupScanDestinationPost = new WalkupScanDestinationPost
+            return new WalkupScanDestinationPost
             {
-                Hostname = new Hostname {Text = hostname},
-                Name = new Name {Text = name},
+                Hostname = new Hostname { Text = hostname },
+                Name = new Name { Text = name },
                 LinkType = "Network"
             };
-            return walkupScanDestinationPost;
         }
 
         public string SerializeToXml()
         {
-            var serializer = new XmlSerializer(typeof(WalkupScanDestinationPost));
+            var ns = new XmlSerializerNamespaces();
+
             using (var memoryStream = new MemoryStream())
             {
-                serializer.Serialize(memoryStream, this);
+                using (XmlWriter writer = XmlWriter.Create(memoryStream, new XmlWriterSettings
+                {
+                    OmitXmlDeclaration = false,
+                    Encoding = new UTF8Encoding(false),
+                    Indent = true
+                }))
+                {
+                    new XmlSerializer(typeof(WalkupScanDestinationPost)).Serialize(writer, this, ns);
+                }
                 return Encoding.UTF8.GetString(memoryStream.ToArray());
             }
         }
