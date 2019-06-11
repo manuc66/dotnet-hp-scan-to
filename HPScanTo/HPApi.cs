@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using HPScanTo.Generated;
@@ -26,7 +27,8 @@ namespace HPScanTo
                 return WalkupScanDestinations.CreateFromStream(inStream);
             }
         }
-        public async Task<EventTable> GetEvents()
+
+        public async Task<(EventTable, EntityTagHeaderValue)> GetEvents()
         {
             var httpClient = new HttpClient();
             var addr = $"{_baseUrl}/EventMgmt/EventTable";
@@ -34,7 +36,19 @@ namespace HPScanTo
 
             using (var inStream = await response.Content.ReadAsStreamAsync())
             {
-                return EventTable.CreateFromStream(inStream);
+                return (EventTable.CreateFromStream(inStream), response.Headers.ETag);
+            }
+        }
+
+        public async Task<(EventTable, EntityTagHeaderValue)> WaitEvents(string etag, int timeout)
+        {
+            var httpClient = new HttpClient();
+            var addr = $"{_baseUrl}/EventMgmt/EventTable?timeout=" + timeout;
+            var response = await httpClient.GetAsync(addr);
+
+            using (var inStream = await response.Content.ReadAsStreamAsync())
+            {
+                return (EventTable.CreateFromStream(inStream), response.Headers.ETag);
             }
         }
 

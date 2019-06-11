@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using HPScanTo.Generated;
 using Zeroconf;
@@ -54,7 +55,9 @@ namespace HPScanTo
                 Console.WriteLine($"Reusing {destination.Name} - {destination.Hostname}");
             }
 
-            var events = await hpApi.GetEvents();
+            (EventTable eventTable, EntityTagHeaderValue etag) = await hpApi.GetEvents();
+
+            await hpApi.WaitEvents(etag.Tag, 1200);
         }
     }
 }
