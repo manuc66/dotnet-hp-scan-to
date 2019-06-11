@@ -5,21 +5,20 @@ using Zeroconf;
 
 namespace HPScanTo
 {
-    class Program
+    internal class Program
     {
-        private static string DEVICE_NAME = "Officejet 6500 E710n-z";
+        private const string DEVICE_NAME = "Officejet 6500 E710n-z";
 
-        static void Main(string[] args)
+        internal static async Task Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            Task t = MainAsync(args);
-            t.Wait();
-        }
-
-        static async Task MainAsync(string[] args)
-        {
+            Task ret;
             var ipAddress = await GetDeviceIPAddress();
+
+            Console.WriteLine(ipAddress);
+
             await Register(ipAddress);
+
         }
 
 
