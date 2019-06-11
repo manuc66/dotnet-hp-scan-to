@@ -8,7 +8,7 @@
     <PackageReference Include="System.Xml.XPath" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="Zeroconf" Version="2.9.0" />
+    <PackageReference Include="Zeroconf" Version="3.0.30" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Xml.XmlSerializer, Version=4.0.11.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
