@@ -53,6 +53,8 @@ namespace HPScanTo
             {
                 Console.WriteLine($"Reusing {destination.Name} - {destination.Hostname}");
             }
+
+            var events = await hpApi.GetEvents();
         }
     }
 }

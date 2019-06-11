@@ -26,6 +26,18 @@ namespace HPScanTo
                 return WalkupScanDestinations.CreateFromStream(inStream);
             }
         }
+        public async Task<EventTable> GetEvents()
+        {
+            var httpClient = new HttpClient();
+            var addr = $"{_baseUrl}/EventMgmt/EventTable";
+            var response = await httpClient.GetAsync(addr);
+
+            using (var inStream = await response.Content.ReadAsStreamAsync())
+            {
+                return EventTable.CreateFromStream(inStream);
+            }
+        }
+
         public async Task<Uri> PostWalkupScanDestinations(WalkupScanDestinationPost destination)
         {
             var httpClient = new HttpClient();
