@@ -41,9 +41,9 @@ namespace HPScanTo.Generated
 
         public string SerializeToXml()
         {
-            var ns = new XmlSerializerNamespaces();
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
 
-            using (var memoryStream = new MemoryStream())
+            using (MemoryStream memoryStream = new MemoryStream())
             {
                 using (XmlWriter writer = XmlWriter.Create(memoryStream, new XmlWriterSettings
                 {

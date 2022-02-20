@@ -18,7 +18,7 @@ namespace HPScanTo.Generated
 
         public static EventTable CreateFromStream(Stream inStream)
         {
-            var serializer = new XmlSerializer(typeof(EventTable));
+            XmlSerializer serializer = new XmlSerializer(typeof(EventTable));
             return (EventTable)serializer.Deserialize(inStream);
         }
     }

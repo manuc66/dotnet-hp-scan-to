@@ -16,7 +16,7 @@ namespace HPScanTo
         {
             Console.WriteLine("Hello World!");
             Task ret;
-            var ipAddress = await GetDeviceIPAddress();
+            string ipAddress = await GetDeviceIPAddress();
 
             Console.WriteLine(ipAddress);
 
@@ -27,9 +27,9 @@ namespace HPScanTo
 
         public static async Task<string> GetDeviceIPAddress()
         {
-            var domains = await ZeroconfResolver.BrowseDomainsAsync();
-            var responses = await ZeroconfResolver.ResolveAsync(domains.Select(g => g.Key));
-            foreach (var resp in responses)
+            ILookup<string, string> domains = await ZeroconfResolver.BrowseDomainsAsync();
+            IReadOnlyList<IZeroconfHost> responses = await ZeroconfResolver.ResolveAsync(domains.Select(g => g.Key));
+            foreach (IZeroconfHost resp in responses)
             {
                 if (resp.DisplayName.StartsWith(DEVICE_NAME))
                 {
@@ -42,10 +42,10 @@ namespace HPScanTo
 
         public static async Task Register(string ipAddress)
         {
-            var hpApi = new HPApi(ipAddress);
-            var destinations = await hpApi.GetWalkupScanDestinations();
+            HPApi hpApi = new HPApi(ipAddress);
+            WalkupScanDestinations destinations = await hpApi.GetWalkupScanDestinations();
 
-            var destination = destinations.WalkupScanDestination.Find(dest => Environment.MachineName == dest.Hostname);
+            WalkupScanDestination destination = destinations.WalkupScanDestination.Find(dest => Environment.MachineName == dest.Hostname);
             if (destination == null)
             {
                 await hpApi.PostWalkupScanDestinations(WalkupScanDestinationPost.CreateFrom(Environment.MachineName, Environment.MachineName));

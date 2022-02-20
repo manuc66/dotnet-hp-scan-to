@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 
 namespace HPScanTo.Tests
@@ -7,15 +8,15 @@ namespace HPScanTo.Tests
     {
         public static Stream GetRessource(string ressourceName)
         {
-            var type = typeof(RessourceHelper);
-            var assembly = type.GetTypeInfo().Assembly;
+            Type type = typeof(RessourceHelper);
+            Assembly assembly = type.GetTypeInfo().Assembly;
             return assembly.GetManifestResourceStream($"{type.Namespace}.ressources.{ressourceName}");
         }
 
         public static string GetRessourceAsString(string ressourceName)
         {
-            using (var stream = RessourceHelper.GetRessource(ressourceName))
-            using (var streamReader = new StreamReader(stream))
+            using (Stream stream = RessourceHelper.GetRessource(ressourceName))
+            using (StreamReader streamReader = new StreamReader(stream))
             {
                 return streamReader.ReadToEnd();
             }

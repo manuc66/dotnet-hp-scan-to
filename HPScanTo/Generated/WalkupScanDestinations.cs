@@ -28,7 +28,7 @@ namespace HPScanTo.Generated
 
         public static WalkupScanDestinations CreateFromStream(Stream inStream)
         {
-            var serializer = new XmlSerializer(typeof(WalkupScanDestinations));
+            XmlSerializer serializer = new XmlSerializer(typeof(WalkupScanDestinations));
             return (WalkupScanDestinations)serializer.Deserialize(inStream);
         }
     }

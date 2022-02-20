@@ -8,11 +8,11 @@ namespace HPScanTo.Tests
         [Fact]
         public void SampleContainsAKnownDestinationName()
         {
-            var expected = RessourceHelper.GetRessourceAsString("WalkupScanDestination.xml");
+            string expected = RessourceHelper.GetRessourceAsString("WalkupScanDestination.xml");
 
-            var walkupScanDestinations = WalkupScanDestinationPost.CreateFrom("LAPTOP-BSHRTBV8", "LAPTOP-BSHRTBV8");
+            WalkupScanDestinationPost walkupScanDestinations = WalkupScanDestinationPost.CreateFrom("LAPTOP-BSHRTBV8", "LAPTOP-BSHRTBV8");
 
-            var serializeToXml = walkupScanDestinations.SerializeToXml();
+            string serializeToXml = walkupScanDestinations.SerializeToXml();
             Assert.Equal(expected, serializeToXml);
         }
     }

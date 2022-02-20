@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -18,11 +19,11 @@ namespace HPScanTo
 
         public async Task<WalkupScanDestinations> GetWalkupScanDestinations()
         {
-            var httpClient = new HttpClient();
-            var addr = $"{_baseUrl}/WalkupScan/WalkupScanDestinations";
-            var response = await httpClient.GetAsync(addr);
+            HttpClient httpClient = new HttpClient();
+            string addr = $"{_baseUrl}/WalkupScan/WalkupScanDestinations";
+            HttpResponseMessage response = await httpClient.GetAsync(addr);
 
-            using (var inStream = await response.Content.ReadAsStreamAsync())
+            using (Stream inStream = await response.Content.ReadAsStreamAsync())
             {
                 return WalkupScanDestinations.CreateFromStream(inStream);
             }
@@ -30,11 +31,11 @@ namespace HPScanTo
 
         public async Task<(EventTable, EntityTagHeaderValue)> GetEvents()
         {
-            var httpClient = new HttpClient();
-            var addr = $"{_baseUrl}/EventMgmt/EventTable";
-            var response = await httpClient.GetAsync(addr);
+            HttpClient httpClient = new HttpClient();
+            string addr = $"{_baseUrl}/EventMgmt/EventTable";
+            HttpResponseMessage response = await httpClient.GetAsync(addr);
 
-            using (var inStream = await response.Content.ReadAsStreamAsync())
+            using (Stream inStream = await response.Content.ReadAsStreamAsync())
             {
                 return (EventTable.CreateFromStream(inStream), response.Headers.ETag);
             }
@@ -42,11 +43,11 @@ namespace HPScanTo
 
         public async Task<(EventTable, EntityTagHeaderValue)> WaitEvents(string etag, int timeout)
         {
-            var httpClient = new HttpClient();
-            var addr = $"{_baseUrl}/EventMgmt/EventTable?timeout=" + timeout;
-            var response = await httpClient.GetAsync(addr);
+            HttpClient httpClient = new HttpClient();
+            string addr = $"{_baseUrl}/EventMgmt/EventTable?timeout=" + timeout;
+            HttpResponseMessage response = await httpClient.GetAsync(addr);
 
-            using (var inStream = await response.Content.ReadAsStreamAsync())
+            using (Stream inStream = await response.Content.ReadAsStreamAsync())
             {
                 return (EventTable.CreateFromStream(inStream), response.Headers.ETag);
             }
@@ -54,9 +55,9 @@ namespace HPScanTo
 
         public async Task<Uri> PostWalkupScanDestinations(WalkupScanDestinationPost destination)
         {
-            var httpClient = new HttpClient();
-            var addr = $"{_baseUrl}/WalkupScan/WalkupScanDestinations";
-            var response = await httpClient.PostAsync(addr,
+            HttpClient httpClient = new HttpClient();
+            string addr = $"{_baseUrl}/WalkupScan/WalkupScanDestinations";
+            HttpResponseMessage response = await httpClient.PostAsync(addr,
                 new StringContent(destination.SerializeToXml(), Encoding.UTF8, "text/xml"));
 
             return response.Headers.Location;
